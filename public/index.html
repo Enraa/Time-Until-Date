@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../jquery.datetimepicker.css">
+    <link rel="stylesheet" href="index.css">
+
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- reference Moment.js library -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js" type="text/javascript"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <!-- DateTimePicker JS from https://xdsoft.net/jqplugins/datetimepicker/ -->
+    <script src="../jquery.datetimepicker.full.min.js"></script>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.15.0/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.15.0/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.15.0/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.15.0/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.15.0/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+  </head>
+  <body>
+    <div class="area" >
+      <ul class="circles">
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+      </ul>
+    </div >
+    <div class="backgroundbox">
+      <div class="centerbox" id="centerboxref">
+        <div class="urltimebox grey lighten-1 z-depth-5">
+          <div class="urltimetitle center-align">The time given:</div>
+          <div class="urltime center-align" id="urltimeref">UrlTimeText</div>
+        </div>
+        <div class="timerbox grey lighten-1 z-depth-5">
+          <div class="timertitle center-align" id="timerreftitle">Timer</div>
+          <div class="timertext center-align" id="timerref">TimerText</div>
+        </div>
+        <div class="selectbox grey lighten-1 z-depth-5">
+          <div class="selecttitle">Select a new time:</div>
+          <div class="selectfloatwrapper">
+            <div class="timepickercontainer">
+              <input id="datetimepicker" type="text" style="font-size: 1.2rem;height: 2rem; padding-top: 0.6rem;"></input>
+            </div>
+            <div class="newurlcontainer">
+              <input class="urltext" id="urltextref" value="<-- Select a time" style="font-size: 1.2rem;height: 2rem; padding-top: 0.6rem;">Some URL Text</input>
+            </div>
+            <button class="urlcopybutton" id="urlcopybuttonref"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      function copyURL() {
+        /* Get the text field */
+        var copyText = document.getElementById("urltextref");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+      }
+
+      function getNewURL(momenttime) {
+        var newtime = moment(momenttime);
+        var urltextref = document.getElementById("urltextref");
+        var currentwindow;
+        if ((window.location.href).search(/\?/) != -1) {
+          currentwindow = (window.location.href).slice(0, window.location.href.search(/\?/)) // This will return just the current url, no time flag.
+        }
+        else {
+          currentwindow = window.location.href // This will return just the current url, no time flag.
+        }
+        if (newtime.isValid()) {
+          currentwindow = `${currentwindow}?time=${newtime.format()}`
+          urltextref.value = currentwindow;
+        }
+        return currentwindow
+      }
+
+      function getUrlVars() {
+        var vars = {};
+        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+          vars[key] = value;
+        });
+        return vars;
+      }
+
+      function timereturn(momentarray) {
+        var returnstring = '';
+        var ago = false;
+        if (momentarray.hasOwnProperty('years')) {
+          if (Math.abs(momentarray.years) != 0) {
+            returnstring = returnstring + `${Math.abs(momentarray.years)} year${(Math.abs(momentarray.years) != 1) ? "s" : ""}, `
+          }
+          if (momentarray.years < 0) {
+            ago = true;
+          }
+        }
+        if (momentarray.hasOwnProperty('months')) {
+          if (Math.abs(momentarray.months) != 0) {
+            returnstring = returnstring + `${Math.abs(momentarray.months)} month${(Math.abs(momentarray.months) != 1) ? "s" : ""}, `
+          }
+          if (momentarray.months < 0) {
+            ago = true;
+          }
+        }
+        if (momentarray.hasOwnProperty('days')) {
+          if (Math.abs(momentarray.days) != 0) {
+            returnstring = returnstring + `${Math.abs(momentarray.days)} day${(Math.abs(momentarray.days) != 1) ? "s" : ""}, `
+          }
+          if (momentarray.days < 0) {
+            ago = true;
+          }
+        }
+        if (momentarray.hasOwnProperty('hours')) {
+          if (Math.abs(momentarray.hours) != 0) {
+            returnstring = returnstring + `${Math.abs(momentarray.hours)} hour${(Math.abs(momentarray.hours) != 1) ? "s" : ""}, `
+          }
+          if (momentarray.hours < 0) {
+            ago = true;
+          }
+        }
+        if (momentarray.hasOwnProperty('minutes')) {
+          if (Math.abs(momentarray.minutes) != 0) {
+            returnstring = returnstring + `${Math.abs(momentarray.minutes)} minute${(Math.abs(momentarray.minutes) != 1) ? "s" : ""}, `
+          }
+          if (momentarray.minutes < 0) {
+            ago = true;
+          }
+        }
+        if (momentarray.hasOwnProperty('seconds')) {
+          if (Math.abs(momentarray.seconds) != 0) {
+            returnstring = returnstring + `${Math.abs(momentarray.seconds)} second${(Math.abs(momentarray.seconds) != 1) ? "s" : ""}`
+          }
+          if (momentarray.seconds < 0) {
+            ago = true;
+          }
+        }
+        if (returnstring.slice(-2) === ", ") {
+          returnstring = returnstring.slice(0,-2);
+        }
+        if (ago) {
+          returnstring = returnstring + " ago"
+        }
+        else {
+          returnstring = "In " + returnstring;
+        }
+        return returnstring
+      }
+
+      window.addEventListener('DOMContentLoaded', (event) => {
+        console.log('DOM fully loaded and parsed');
+        var urlvars = getUrlVars();
+        if (getUrlVars().hasOwnProperty('time')) {
+          if (!(moment(getUrlVars().time).isValid())) {
+            var currentime = getNewURL(moment().format());
+            window.location.replace(currentime);
+          }
+        }
+        else {
+          var currentime = getNewURL(moment().format());
+          window.location.replace(currentime);
+        }
+        var themoment = moment(getUrlVars().time);
+        var now = moment();
+        var timerref = document.getElementById("timerref");
+        var timerreftitle = document.getElementById("timerreftitle");
+        var urltimeref = document.getElementById("urltimeref");
+        var centerboxref = document.getElementById("centerboxref");
+        centerboxref.classList.add("centerboxenlarged");
+        var thedata = moment.duration(themoment.diff(now))._data;
+        var initialstring = timereturn(thedata);
+        var initialstringsize = (2.0-((initialstring.length - 46)/30));
+        if (initialstringsize < 2.0) {
+          timerref.style.fontSize = `${initialstringsize}rem`
+        }
+        timerreftitle.textContent = (initialstring.search("ago") != -1) ? "This occurred" : "Will happen"
+        timerref.textContent = initialstring;
+        urltimeref.textContent = themoment.format("MMMM Do YYYY, h:mm:ss a");
+        var updatetimer = setInterval(() => {
+          var now = moment();
+          var themoment = moment(getUrlVars().time);
+          var timerref = document.getElementById("timerref");
+          var timerreftitle = document.getElementById("timerreftitle");
+          var thedata = moment.duration(themoment.diff(now))._data;
+          var updatestring = timereturn(thedata);
+          var updatestringsize = (2.0-((updatestring.length - 46)/30));
+          if (updatestringsize < 2.0) {
+            timerref.style.fontSize = `${updatestringsize}rem`
+          }
+          timerreftitle.textContent = (updatestring.search("ago") != -1) ? "This occurred" : "Will happen"
+          timerref.textContent = updatestring;
+        }, 1000);
+        jQuery('#datetimepicker').datetimepicker('setOptions', {value: now.format("MM/DD/YYYY HH:mm")})
+      });
+
+      jQuery('#datetimepicker').datetimepicker({
+        theme: 'dark',
+        format: 'm/d/Y H:i', 
+        step: 15,
+        defaultDate: new Date(),
+        onSelectDate:function(dp,$input){
+          console.log(moment(dp).format("MMMM Do YYYY, h:mm:ss a"));
+          getNewURL(dp);
+        },
+        onSelectTime:function(dp,$input){
+          console.log(moment(dp).format("MMMM Do YYYY, h:mm:ss a"));
+          getNewURL(dp);
+        }
+      });
+
+      $(document).ready(function() {
+        $("#urlcopybuttonref").click(function(){
+          copyURL();
+        }); 
+      });
+
+    </script>
+  </body>
+</html>

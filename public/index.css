@@ -1,0 +1,102 @@
+body {
+    overflow: hidden;
+}
+.backgroundbox {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+}
+.centerbox {
+    width: 45rem;
+    height: 10rem;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%) scale(0.5);
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+    transition: all 0.6s ease-out;
+}
+.centerboxenlarged {
+    -ms-transform: translate(-50%, -50%) scale(1.0);
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 1;
+}
+.timertext {
+    font-size: 2rem;
+}
+.urltimebox {
+    margin-bottom: 2rem;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+.timerbox {
+    margin-bottom: 2rem;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+.selectbox {
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    height: 5.5rem
+}
+.urltime {
+    font-size: 2rem;
+}
+.timerbox:hover, .urltimebox:hover, .selectbox:hover {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+.selecttitle {
+    padding-left: 1rem;
+}
+.timepickercontainer {
+    position: relative;
+    width: 11rem;
+    padding-left: 1rem;
+    height: 1.5rem;
+    float: left;
+}
+.newurlcontainer {
+    position: relative;
+    float: left;
+    width: 29rem;
+    margin-left: 0.5rem;
+    font-size: 1.2rem;
+    overflow: hidden;
+    height: 2.8rem;
+}
+.urlcopybutton {
+    position: relative;
+    float: left;
+    width: 3rem;
+    height: 2.8rem;
+    margin-left: 1rem;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background-image: url('copyicon.png');
+    background-size: 100% 100%;
+}
+
+body {
+	background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+	background-size: 400% 400%;
+	animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
